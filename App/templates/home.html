@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h2>Bienvenue sur le chatbot IA_Flight</h2>
+<p>
+    Vous pouvez utiliser le chatbot ci-dessous pour vous aider à réserver vos vols !
+    Si vous avez des questions sur les fonctionnalités du chatbot, écrivez "/help".
+</p>
+
+<div class="container p-4">
+    <div class="bg-white p-4 rounded shadow-sm">
+        <h1 class="h4 font-weight-bold mb-3">Chatbot</h1>
+        <div id="chat-box" class="border p-3 h-100 overflow-auto mb-3 bg-light rounded" style="height: 256px;">
+            <div class="d-flex justify-content-start mb-2">
+                <div class="p-2 bg-light rounded" style="max-width: 70%;">
+                    <strong>Bot:</strong> Bonjour, je suis FlyChat! 👋
+                </div>
+            </div>
+        </div>
+        <form id="chat-form" class="d-flex">
+            <input type="text" id="user-input" name="message" placeholder="Tapez un message..." class="form-control mr-2">
+            <button type="submit" class="btn btn-primary">Envoyer</button>
+        </form>
+    </div>
+</div>
+<script>
+    const userName = "{{ user_name }}";
+    const form = document.getElementById('chat-form');
+    form.addEventListener('submit', function(event) {
+        event.preventDefault();
+        const userInput = document.getElementById('user-input').value;
+        const chatBox = document.getElementById('chat-box');
+
+        chatBox.innerHTML += `
+            <div class="d-flex justify-content-end mb-2">
+                <div class="p-2 bg-primary text-white rounded" style="max-width: 70%;">
+                    <strong>${userName}:</strong> <span>${userInput}</span>
+                </div>
+            </div>`;
+        document.getElementById('user-input').value = "";
+
+        fetch('/chat', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'X-CSRFToken': '{{ csrf_token() }}'
+            },
+            body: `message=${userInput}`
+        })
+        .then(response => response.json())
+        .then(data => {
+            chatBox.innerHTML += `
+                <div class="d-flex justify-content-start mb-2">
+                    <div class="p-2 bg-light rounded" style="max-width: 70%;">
+                        <strong>Bot:</strong> <span>${data.response}</span>
+                    </div>
+                </div>`;
+            chatBox.scrollTop = chatBox.scrollHeight;
+        });
+    });
+</script>
+
+{% endblock %}

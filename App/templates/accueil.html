@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4 d-flex flex-column align-items-center">
+    <div class="d-flex flex-column align-items-center mb-4">
+        <img src="{{ url_for('static', filename='img/logoFly.png') }}" alt="Logo IA_Flight" class="rounded-circle mb-3" style="height: 128px; width: 128px;">
+        <h1 class="text-primary font-weight-bold">IA_Flight Chatbot</h1>
+        <p class="text-center text-muted mt-3">
+            Bienvenue sur IA_Flight, votre assistant de vol intelligent. 
+            
+        </p>
+    </div>
+    {% if not current_user.is_authenticated %}
+        <p class="text-center text-muted">Connectez-vous ou inscrivez-vous pour accéder à des fonctionnalités personnalisées 
+            et obtenir de l'aide en temps réel pour vos réservations et informations de vol.</p>
+        <div class="d-flex justify-content-center">
+            <a href="/login" class="btn btn-primary btn-sm font-weight-bold mr-2">Connexion</a>
+            <a href="/register" class="btn btn-primary btn-sm font-weight-bold">Inscription</a>
+        </div>
+        {% else %}
+        <p class="text-center text-muted">Bienvenue {{ user_name }} {{ user_surname }}!</p>
+        <div class="d-flex justify-content-center">
+            <a href="{{ url_for('chat') }}" class="btn btn-primary btn-sm font-weight-bold mr-2">Discutons</a>
+            
+    {% endif %}
+</div>
+{% endblock %}

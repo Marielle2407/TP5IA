@@ -1,0 +1,2 @@
+suivre les etapes du README.MD
+- LE prix de vols enrichi se trouver dans DATA  et se nomme En_data.csv
